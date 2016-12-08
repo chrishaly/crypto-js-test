@@ -1,1 +1,4 @@
 /src/src/JsTest/wwwroot/lib/
+**/bin/Debug/
+**/obj/Debug/
+.vs/

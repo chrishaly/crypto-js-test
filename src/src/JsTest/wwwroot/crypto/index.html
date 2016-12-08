@@ -3,34 +3,41 @@
 	<script data-main="main" src="../lib/requirejs/require.js"></script>
 </head>
 <body>
+	PBKDF2 HMAC-SHA256 Test<br />
+	<div id="result"></div>
 	<script>
 		require.config({
 			baseUrl: "../lib"
 		});
-		require(["crypto-js/crypto-js", "crypto-js/aes", "crypto-js/sha256", "crypto-js/pbkdf2"], function ()
-		{
-			console.log("load finished");
-			var AES = require("crypto-js/aes");
-			var SHA256 = require("crypto-js/sha256");
-			console.log(SHA256("Message"));
-
-			var CryptoJS = require("crypto-js/crypto-js");
-			var salt = CryptoJS.lib.WordArray.random(128 / 8);
-			var sha = CryptoJS.algo.SHA256;
-
-			CryptoJS.PBKDF2("Secret Passphrase", salt, { keySize: 256 / 32, hasher: sha, iterations: 1000 });
-
-			for (var i = 1000; i <= 20000; i += 1000)
+		require(["crypto-js/crypto-js", "crypto-js/aes", "crypto-js/sha256", "crypto-js/pbkdf2"],
+			function ()
 			{
-				var startDate = new Date().getTime();
-				var key = CryptoJS.PBKDF2("Secret Passphrase", salt, { keySize: 256 / 32, hasher: sha, iterations: i });
-				var endDate = new Date().getTime();
-				var ts = endDate - startDate;
-				console.log(i + "\t" + ts + "\t" + key.toString());
-				//console.log(key);
-			}
+				console.log("load finished");
+				var AES = require("crypto-js/aes");
+				var SHA256 = require("crypto-js/sha256");
+				console.log(SHA256("Message"));
 
-		});
+				var CryptoJS = require("crypto-js/crypto-js");
+				var salt = CryptoJS.lib.WordArray.random(128 / 8);
+				var sha = CryptoJS.algo.SHA256;
+
+				CryptoJS.PBKDF2("Secret Passphrase", salt, { keySize: 256 / 32, hasher: sha, iterations: 1000 });
+
+				var result = "";
+				for (var i = 1000; i <= 20000; i += 1000)
+				{
+					var startDate = new Date().getTime();
+					var key = CryptoJS.PBKDF2("Secret Passphrase", salt, { keySize: 256 / 32, hasher: sha, iterations: i });
+					var endDate = new Date().getTime();
+					var ts = endDate - startDate;
+					var line = i + "\t" + ts + "\t" + key.toString();
+					console.log(line);
+					result += line + "<br />";
+					document.getElementById("result").innerHTML = result;
+					//console.log(key);
+				}
+				document.getElementById("result").innerHTML = result;
+			});
 	</script>
 </body>
 </html>
